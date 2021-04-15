@@ -1,0 +1,91 @@
+<button routerLink="../.." class="ui grey button tiny">
+  <i class="arrow left icon"></i>
+  Zurück zur Impfterminübersicht
+</button>
+
+<h1>Anmeldung</h1>
+<h3>{{vaccination?.location.name}}</h3>
+<p>Dieser Impftermin findet bei der Adresse <b>{{vaccination?.location.address}}, {{vaccination?.location.zipcode}}
+  {{vaccination?.location.city}}</b> am <b>{{vaccination?.dateOfVaccination | date:"dd.MM.yyyy"}}</b> zwischen <b>{{vaccination?.fromTime | date:"HH:mm"}} und
+  {{vaccination?.toTime | date:"HH:mm"}}</b> statt.</p>
+
+<div class="ui four column grid" style="padding-bottom: 10px; margin-top: 30px">
+  <div class="row" style="padding-bottom:0;">
+    <div class="four wide column left aligned">
+      <h4>Vorname:</h4>
+    </div>
+    <div class="column">
+      <div class="ui input">
+        <input type="text" placeholder="Vorname" [(ngModel)]="activeUser.firstname">
+      </div>
+    </div>
+  </div>
+  <div class="row" style="padding-bottom:0;">
+    <div class="four wide column left aligned">
+      <h4>Nachname:</h4>
+    </div>
+    <div class="column">
+      <div class="ui input">
+        <input type="text" placeholder="Nachname" [(ngModel)]="activeUser.lastname">
+      </div>
+    </div>
+  </div>
+  <div class="row" style="padding-bottom:0;">
+    <div class="four wide column left aligned">
+      <h4>Geschlecht:</h4>
+    </div>
+    <div class="column">
+      <div class="ui input">
+        <select class="ui dropdown" style="border-radius: 4px;" [(ngModel)]='selectedGender'>
+          <option *ngFor="let gender of genders" [ngValue]="gender">{{gender}}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="row" style="padding-bottom:0;">
+    <div class="four wide column left aligned">
+      <h4>Geburtsdatum:</h4>
+    </div>
+    <div class="column">
+      <div class="ui input">
+        <input type="date" placeholder="Geburtsdatum" [(ngModel)]="activeUser.dateOfBirth">
+      </div>
+    </div>
+  </div>
+  <div class="row" style="padding-bottom:0;">
+    <div class="four wide column left aligned">
+      <h4>Sozialversicherungsnummer (SVNR):</h4>
+    </div>
+    <div class="column">
+      <div class="ui input">
+        <input type="number" placeholder="SVNR" [(ngModel)]="activeUser.socialSecurityNumber">
+      </div>
+    </div>
+  </div>
+  <div class="row" style="padding-bottom:0;">
+    <div class="four wide column left aligned">
+      <h4>Telefonnummer:</h4>
+    </div>
+    <div class="column">
+      <div class="ui input">
+        <input type="tel" placeholder="Telefonnummer" [(ngModel)]="activeUser.phonenumber">
+      </div>
+    </div>
+  </div>
+  <div class="row" style="padding-bottom:0;">
+    <div class="four wide column left aligned">
+      <h4>Email:</h4>
+    </div>
+    <div class="column">
+      <div class="ui input">
+        <input type="email" placeholder="Email" [(ngModel)]="activeUser.email">
+      </div>
+    </div>
+  </div>
+  <div class="row" style="padding-bottom:0;">
+    <button class="ui blue labeled icon button" (click)="addUserToVaccination()">
+        <i class="save icon"></i>
+        Zum Impftermin anmelden
+      </button>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+<div class="ui secondary menu c-navbar">
+  <div class="ui container">
+    <h3 class="ui header c-logo">
+      <i class="syringe icon"></i>
+      <div class="content">
+        Corana Impfplattform
+      </div>
+    </h3>
+    <div class="right menu">
+      <a class="">
+        <!--<a *ngIf="isLoggedIn()" routerLink="admin" routerLinkActive="active" class="item">Administration</a>-->
+        <a routerLink="login" routerLinkActive="active" class="item ui item active">{{getLoginLabel()}}</a>
+      </a>
+    </div>
+  </div>
+</div>
+<div class="ui container">
+  <router-outlet></router-outlet>
+</div>

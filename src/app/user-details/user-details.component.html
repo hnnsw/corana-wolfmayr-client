@@ -1,0 +1,56 @@
+<button routerLink=".." class="ui grey button tiny">
+  <i class="arrow left icon"></i>
+  Zurück zu den Impftermindetails
+</button>
+
+<h1>{{user.lastname}} {{user.firstname}}</h1>
+<div class="ui four column grid">
+  <div class="row" style="padding-bottom:0;">
+    <div class="four wide column left aligned">
+      <h4>Geschlecht:</h4>
+    </div>
+    <div class="column">
+      {{user.gender}}
+    </div>
+  </div>
+  <div class="row" style="padding-bottom:0;">
+    <div class="four wide column left aligned">
+      <h4>Geburtsdatum:</h4>
+    </div>
+    <div class="column">
+      {{user.dateOfBirth}}
+    </div>
+  </div>
+  <div class="row" style="padding-bottom:0;">
+    <div class="four wide column left aligned">
+      <h4>Sozialversicherungsnummer(SVNR):</h4>
+    </div>
+    <div class="column">
+      {{user.socialSecurityNumber}}
+    </div>
+  </div>
+  <div class="row" style="padding-bottom:0;">
+    <div class="four wide column left aligned">
+      <h4>Email:</h4>
+    </div>
+    <div class="column">
+      {{user.email}}
+    </div>
+  </div>
+  <div class="row" style="padding-bottom:0;">
+    <div class="four wide column left aligned">
+      <h4>Telefonnummer:</h4>
+    </div>
+    <div class="column">
+      {{user.phonenumber}}
+    </div>
+  </div>
+  <div class="row" style="padding-bottom:0;">
+    <div class="four wide column left aligned">
+      <h4>Impfung erhalten:</h4>
+    </div>
+    <div class="column">
+      <input [(ngModel)]="user.vaccinated" type="checkbox" (change)="saveUser()"/>
+    </div>
+  </div>
+</div>

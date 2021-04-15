@@ -1,0 +1,7 @@
+<td data-label="Name">{{user?.lastname}} {{user?.firstname}}</td>
+<td data-label="Geschlecht">{{user?.gender}}</td>
+<td data-label="Sozialversicherungsnummer">{{user?.socialSecurityNumber}}</td>
+<td data-label="Impfung erhalten">{{user?.vaccinated && 'Impfung erhalten' || 'ausstehend'}}</td>
+<td class="selectable warning">
+  <a [routerLink]="user.username">Details</a>
+</td>

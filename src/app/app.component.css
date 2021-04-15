@@ -1,0 +1,13 @@
+p {
+  font-family: Lato;
+}
+
+.c-navbar {
+  background-color: #F4f4f4 !important;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.c-logo {
+  padding-top: 20px;
+}
