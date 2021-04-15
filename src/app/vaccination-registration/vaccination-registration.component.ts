@@ -1,5 +1,6 @@
 import { DatePipe } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { AuthenticationService } from "../shared/authentication.service";
@@ -18,6 +19,7 @@ export class VaccinationRegistrationComponent implements OnInit {
   activeUser: User = UserFactory.empty();
   selectedGender: string;
   genders: string[] = ["männlich", "weiblich", "divers"];
+  registrationForm: FormGroup;
 
   constructor(
     private vs: VaccinationService,
@@ -26,10 +28,21 @@ export class VaccinationRegistrationComponent implements OnInit {
     private toastr: ToastrService,
     public datepipe: DatePipe,
     private us: UserService,
-    public authService: AuthenticationService
+    public authService: AuthenticationService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit() {
+    this.registrationForm = this.fb.group({
+      firstname: ["", [Validators.required]],
+      lastname: ["", [Validators.required]],
+      gender: ["", [Validators.required]],
+      dateOfBirth: ["", [Validators.required]],
+      socialSecurityNumber: ["", [Validators.required]],
+      phonenumber: ["", [Validators.required]],
+      email: ["", [Validators.required]]
+    });
+
     const params = this.route.snapshot.params;
     this.vs.getSingle(params["id"]).subscribe(res => {
       this.vaccination = res;

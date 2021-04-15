@@ -10,6 +10,7 @@ import { LocationService } from "../shared/location.service";
 import { UserService } from "../shared/user.service";
 import { UserFactory } from "../shared/user-factory";
 import { AuthenticationService } from "../shared/authentication.service";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: "c-vaccination-details",
@@ -23,6 +24,7 @@ export class VaccinationDetailsComponent implements OnInit {
   selectedLocationId: number;
   users: User[];
   activeUser: User = UserFactory.empty();
+  editForm: FormGroup;
 
   @Output() showDetailsEvent = new EventEmitter<User>();
 
@@ -34,7 +36,8 @@ export class VaccinationDetailsComponent implements OnInit {
     private toastr: ToastrService,
     public datepipe: DatePipe,
     private us: UserService,
-    public authService: AuthenticationService
+    public authService: AuthenticationService,
+    private fb: FormBuilder
   ) {}
 
   showDetails(user: User) {
@@ -42,6 +45,14 @@ export class VaccinationDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.editForm = this.fb.group({
+      location: ["", [Validators.required]],
+      dateOfVaccination: ["", [Validators.required]],
+      fromTime: ["", [Validators.required]],
+      toTime: ["", [Validators.required]],
+      maxParticipants: ["", [Validators.required, Validators.min(1)]]
+    });
+
     const params = this.route.snapshot.params;
     this.vs.getSingle(params["id"]).subscribe(res => {
       this.vaccination = res;
@@ -94,6 +105,7 @@ export class VaccinationDetailsComponent implements OnInit {
           "Impftermindetails aktualisiert!"
         );
       });
+      this.router.navigate(["../../"], { relativeTo: this.route });
     }
   }
 }
