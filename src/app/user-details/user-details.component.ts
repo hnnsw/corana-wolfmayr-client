@@ -25,6 +25,7 @@ export class UserDetailsComponent implements OnInit {
     });
   }
 
+  //change vaccination details for user - add vaccination + remove vaccination (just for accidental changes) functionality
   saveUser() {
     if (confirm("Wollen sie diese Änderung wirklich vornehmen?")) {
       this.us.saveUser(this.user).subscribe(res => {

@@ -33,11 +33,9 @@ export class VaccinationListComponent implements OnInit {
     private datePipe: DatePipe
   ) {}
 
-  showDetails(vaccination: Vaccination) {
-    this.showDetailsEvent.emit(vaccination);
-  }
-
   ngOnInit() {
+    //reactive forms for new vaccination
+    //date: it's a hack and it just works if you don't change the format, had some problems
     this.createForm = this.fb.group({
       location: ["", [Validators.required]],
       dateOfVaccination: ["", [Validators.required]],
@@ -69,6 +67,12 @@ export class VaccinationListComponent implements OnInit {
     });
   }
 
+  //show vaccination details
+  showDetails(vaccination: Vaccination) {
+    this.showDetailsEvent.emit(vaccination);
+  }
+
+  //add new vaccination
   addVaccination() {
     const val = this.createForm.value;
 

@@ -48,7 +48,6 @@ export class VaccinationDetailsComponent implements OnInit {
       this.vaccination = res;
       this.vaccination.fromTime = new Date(this.vaccination.fromTime);
       this.vaccination.toTime = new Date(this.vaccination.toTime);
-
       this.users = this.vaccination.users;
       this.vaccinationPassed = this.isPassed(this.vaccination.dateOfVaccination);
 
@@ -60,6 +59,8 @@ export class VaccinationDetailsComponent implements OnInit {
           });
       }
 
+      //reactive forms for edit vaccination
+      //date: it's a hack and it just works if you don't change the format, had some problems
       this.editForm = this.fb.group({
         location: [this.vaccination?.location_id, [Validators.required]],
         dateOfVaccination: [
@@ -96,6 +97,7 @@ export class VaccinationDetailsComponent implements OnInit {
       return false;
   }
 
+  //delete vaccination
   removeVaccination() {
     if (confirm("Wollen Sie diesen Termin wirklich löschen?")) {
       this.vs.remove(this.vaccination.id).subscribe(res => {
@@ -108,6 +110,7 @@ export class VaccinationDetailsComponent implements OnInit {
     }
   }
 
+  //edit vaccination information 
   saveVaccination() {
     const val = this.editForm.value;
 
