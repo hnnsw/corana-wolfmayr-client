@@ -15,7 +15,6 @@ export class UserDetailsComponent implements OnInit {
   constructor(
     private us: UserService,
     private route: ActivatedRoute,
-    private router: Router,
     private toastr: ToastrService
   ) {}
 
@@ -29,7 +28,7 @@ export class UserDetailsComponent implements OnInit {
   saveUser() {
     if (confirm("Wollen sie diese Änderung wirklich vornehmen?")) {
       this.us.saveUser(this.user).subscribe(res => {
-        this.toastr.success(
+        this.toastr.info(
           "Impfdetails wurden aktualisiert",
           "Impfdetails aktualisiert!"
         );

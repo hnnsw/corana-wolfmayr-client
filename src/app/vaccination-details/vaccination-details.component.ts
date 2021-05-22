@@ -17,13 +17,11 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
   templateUrl: "./vaccination-details.component.html"
 })
 export class VaccinationDetailsComponent implements OnInit {
-  vaccination: Vaccination = VaccinationFactory.empty();
-  location: Location = LocationFactory.empty();
   locations: Location[];
-  vaccinationPassed: boolean = false;
-  selectedLocationId: number;
   users: User[];
   activeUser: User = UserFactory.empty();
+  vaccination: Vaccination = VaccinationFactory.empty();
+  vaccinationPassed: boolean = false;
   editForm: FormGroup;
 
   @Output() showDetailsEvent = new EventEmitter<User>();
@@ -31,13 +29,13 @@ export class VaccinationDetailsComponent implements OnInit {
   constructor(
     private vs: VaccinationService,
     private ls: LocationService,
+    private us: UserService,
+    private authService: AuthenticationService,
+    private toastr: ToastrService,
     private route: ActivatedRoute,
     private router: Router,
-    private toastr: ToastrService,
-    public datepipe: DatePipe,
-    private us: UserService,
-    public authService: AuthenticationService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private datePipe: DatePipe
   ) {}
 
   showDetails(user: User) {
@@ -45,30 +43,14 @@ export class VaccinationDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.editForm = this.fb.group({
-      location: ["", [Validators.required]],
-      dateOfVaccination: ["", [Validators.required]],
-      fromTime: ["", [Validators.required]],
-      toTime: ["", [Validators.required]],
-      maxParticipants: ["", [Validators.required, Validators.min(1)]]
-    });
-
     const params = this.route.snapshot.params;
     this.vs.getSingle(params["id"]).subscribe(res => {
       this.vaccination = res;
+      this.vaccination.fromTime = new Date(this.vaccination.fromTime);
+      this.vaccination.toTime = new Date(this.vaccination.toTime);
 
       this.users = this.vaccination.users;
-      this.location = this.vaccination.location;
-      this.selectedLocationId = this.location.id;
-
-      if (
-        this.datepipe.transform(
-          this.vaccination.dateOfVaccination,
-          "yyyy-MM-dd"
-        ) > this.datepipe.transform(new Date(), "yyyy-MM-dd")
-      ) {
-        this.vaccinationPassed = true;
-      }
+      this.vaccinationPassed = this.isPassed(this.vaccination.dateOfVaccination);
 
       if (this.authService.isLoggedIn()) {
         this.us
@@ -77,11 +59,41 @@ export class VaccinationDetailsComponent implements OnInit {
             this.activeUser = res;
           });
       }
+
+      this.editForm = this.fb.group({
+        location: [this.vaccination?.location_id, [Validators.required]],
+        dateOfVaccination: [
+          this.vaccination?.dateOfVaccination,
+          [Validators.required]
+        ],
+        fromTime: [
+          this.datePipe.transform(this.vaccination?.fromTime, "yyyy-MM-dd hh:mm:ss"),
+          //this.vaccination?.fromTime,
+          [Validators.required]
+        ],
+        toTime: [
+          this.datePipe.transform(this.vaccination?.toTime, "yyyy-MM-dd hh:mm:ss"),
+          //this.vaccination?.toTime,
+          [Validators.required]
+        ],
+        maxParticipants: [
+          this.vaccination?.maxParticipants,
+          [Validators.required, Validators.min(1)]
+        ]
+      });
     });
 
     this.ls.getAllLocations().subscribe(res => {
       this.locations = res;
     });
+  }
+
+  //check if vaccination date is passed
+  isPassed(vaccinationDate){
+     if (this.datePipe.transform(vaccinationDate,"yyyy-MM-dd") > this.datePipe.transform(new Date(), "yyyy-MM-dd")) {
+        return true;
+      }
+      return false;
   }
 
   removeVaccination() {
@@ -97,8 +109,15 @@ export class VaccinationDetailsComponent implements OnInit {
   }
 
   saveVaccination() {
+    const val = this.editForm.value;
+
     if (confirm("Wollen sie diese Änderungen wirklich speichern?")) {
-      this.vaccination.location_id = this.selectedLocationId;
+      this.vaccination.location_id = val.location;
+      this.vaccination.dateOfVaccination = new Date(val.dateOfVaccination);
+      this.vaccination.fromTime = val.fromTime;
+      this.vaccination.toTime = val.toTime;
+      this.vaccination.maxParticipants = val.maxParticipants;
+
       this.vs.saveVaccination(this.vaccination).subscribe(res => {
         this.toastr.success(
           "Impftermindetails wurden aktualisiert",

@@ -12,15 +12,18 @@ import { ToastrModule } from "ngx-toastr";
 import { VaccinationDetailsComponent } from "./vaccination-details/vaccination-details.component";
 import { UserListItemComponent } from "./user-list-item/user-list-item.component";
 import { UserDetailsComponent } from "./user-details/user-details.component";
-import { DatePipe } from "@angular/common";
+import { DatePipe, registerLocaleData } from "@angular/common";
 import { UserService } from "./shared/user.service";
 import { LocationService } from "./shared/location.service";
-import { NgModule } from "@angular/core";
+import { LOCALE_ID, NgModule } from "@angular/core";
 import { AuthenticationService } from "./shared/authentication.service";
 import { LoginComponent } from "./login/login.component";
 import { TokenInterceptorService } from "./shared/token-interceptor.service";
 import { JwtInterceptorService } from "./shared/jwt-interceptor.service";
 import { VaccinationRegistrationComponent } from "./vaccination-registration/vaccination-registration.component";
+import localeDe from "@angular/common/locales/de";
+
+registerLocaleData(localeDe);
 
 @NgModule({
   imports: [
@@ -59,6 +62,10 @@ import { VaccinationRegistrationComponent } from "./vaccination-registration/vac
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptorService,
       multi: true
+    },
+    {
+      provide: LOCALE_ID,
+      useValue: "de"
     }
   ]
 })

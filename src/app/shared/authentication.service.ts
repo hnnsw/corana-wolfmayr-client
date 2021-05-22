@@ -27,11 +27,7 @@ export class AuthenticationService {
   }
 
   public setLocalStorage(token: string) {
-    console.log("Storing token");
-    console.log(jwt_decode(token));
     const decodedToken = jwt_decode(token) as Token;
-    console.log(decodedToken);
-    console.log(decodedToken.user.id);
     localStorage.setItem("token", token);
     localStorage.setItem("userId", decodedToken.user.id);
   }

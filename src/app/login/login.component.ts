@@ -2,6 +2,9 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { AuthenticationService } from "../shared/authentication.service";
+import { User } from "../shared/user";
+import { UserFactory } from "../shared/user-factory";
+import { UserService } from "../shared/user.service";
 
 interface Response {
   access_token: string;
@@ -13,18 +16,21 @@ interface Response {
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
+  activeUser: User = UserFactory.empty();
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthenticationService
   ) {}
+
   ngOnInit() {
     this.loginForm = this.fb.group({
       username: ["", [Validators.required]],
       password: ["", Validators.required]
     });
   }
+
   login() {
     const val = this.loginForm.value;
     if (val.username && val.password) {
@@ -35,6 +41,8 @@ export class LoginComponent implements OnInit {
       });
     }
   }
+
+
   isLoggedIn() {
     return this.authService.isLoggedIn();
   }

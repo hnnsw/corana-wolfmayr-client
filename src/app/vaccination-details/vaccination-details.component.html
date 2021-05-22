@@ -6,13 +6,13 @@
 
   <h1>{{vaccination?.location.name}}</h1>
   <p *ngIf="vaccinationPassed; else passed">Dieser Impftermin findet bei der Adresse <b>{{vaccination?.location.address}}, {{vaccination?.location.zipcode}}
-    {{vaccination?.location.city}}</b> am <b>{{vaccination?.dateOfVaccination | date:"dd.MM.yyyy"}}</b> zwischen <b>{{vaccination?.fromTime | date:"HH:mm"}} und
-    {{vaccination?.toTime | date:"HH:mm"}}</b> statt.</p>
+    {{vaccination?.location.city}}</b> am <b>{{vaccination?.dateOfVaccination | date:"dd.MM.yyyy"}}</b> zwischen <b>{{vaccination?.fromTime | date:"shortTime"}} und
+    {{vaccination?.toTime | date:"shortTime"}}</b> statt.</p>
 
   <ng-template #passed>
     <p>Dieser Impftermin hat bereits, bei der Adresse <b>{{vaccination?.location.address}}, {{vaccination?.location.zipcode}}
-    {{vaccination?.location.city}}</b>, am <b>{{vaccination?.dateOfVaccination | date:"dd.MM.yyyy"}}</b> zwischen <b>{{vaccination?.fromTime | date:"HH:mm"}} und
-    {{vaccination?.toTime | date:"HH:mm"}}</b> stattgefunden.</p>
+    {{vaccination?.location.city}}</b>, am <b>{{vaccination?.dateOfVaccination | date:"dd.MM.yyyy"}}</b> zwischen <b>{{vaccination?.fromTime | date:"shortTime"}} und
+    {{vaccination?.toTime | date:"shortTime"}}</b> stattgefunden.</p>
   </ng-template>
 
   <h2>Anmeldungen</h2>
@@ -37,52 +37,52 @@
   </div>
   <p *ngIf="users && !users.length">Es haben sich noch keine User für diesen Termin eingetragen.</p>
 
-   <div *ngIf="vaccinationPassed">
+  <div *ngIf="vaccinationPassed">
     <h2>Termin verwalten</h2>
-    <form class="ui large form" [formGroup]="editForm" (ngSubmit)="saveVaccination()" style="margin-bottom: 50px;">
+    <form class="ui large form" [formGroup]="editForm" (ngSubmit)="saveVaccination()">
       <div class="field">
         <label>Ort</label>
-        <select class="ui dropdown" [(ngModel)]="selectedLocationId" style="border-radius: 4px;" formControlName="location">
-        <option *ngFor="let location of locations" [ngValue]="location.id">{{location.name}} ({{location.address}}, {{location.zipcode}} {{location.city}})</option>
-      </select>
+        <select class="ui dropdown" style="border-radius: 4px;" formControlName="location">
+          <option *ngFor="let location of locations" [ngValue]="location.id">{{location.name}} ({{location.address}}, {{location.zipcode}} {{location.city}})</option>
+        </select>
         <div
           *ngIf="editForm.get('location').invalid && (editForm.get('location').dirty || editForm.get('location').touched) && editForm.get('location').hasError('required')"
           class="ui negative message">Ort ist verpflichtend </div>
       </div>
       <div class="field">
         <label>Datum</label>
-        <input type="date" placeholder="Datum" [(ngModel)]="vaccination.dateOfVaccination" formControlName="dateOfVaccination">
+        <input type="date" placeholder="Datum" formControlName="dateOfVaccination">
         <div
           *ngIf="editForm.get('dateOfVaccination').invalid && (editForm.get('dateOfVaccination').dirty || editForm.get('dateOfVaccination').touched) && editForm.get('dateOfVaccination').hasError('required')"
           class="ui negative message">Datum ist verpflichtend </div>
       </div>
       <div class="field">
         <label>Von (Uhrzeit)</label>
-        <input type="datetime" placeholder="Von" [(ngModel)]="vaccination.fromTime" formControlName="fromTime">
+        <input type="datetime" placeholder="Von" formControlName="fromTime">
         <div
           *ngIf="editForm.get('fromTime').invalid && (editForm.get('fromTime').dirty || editForm.get('fromTime').touched) && editForm.get('fromTime').hasError('required')"
           class="ui negative message">Zeit (Von) ist verpflichtend </div>
       </div>
       <div class="field">
         <label>Bis (Uhrzeit)</label>
-        <input type="datetime" placeholder="Bis" [(ngModel)]="vaccination.toTime" formControlName="toTime">
+        <input type="datetime" placeholder="Bis" formControlName="toTime">
         <div
           *ngIf="editForm.get('toTime').invalid && (editForm.get('toTime').dirty || editForm.get('toTime').touched) && editForm.get('toTime').hasError('required')"
           class="ui negative message">Zeit (Bis) ist verpflichtend </div>
       </div>
       <div class="field">
         <label>Max. Teilnehmerzahl</label>
-        <input type="number" placeholder="Max. Teilnehmer" [(ngModel)]="vaccination.maxParticipants" formControlName="maxParticipants">
+        <input type="number" placeholder="Max. Teilnehmer" formControlName="maxParticipants">
         <div
           *ngIf="editForm.get('maxParticipants').invalid && (editForm.get('maxParticipants').dirty || editForm.get('maxParticipants').touched) && editForm.get('maxParticipants').hasError('required')"
-          class="ui negative message">Zeit (Bis) ist verpflichtend </div>
+          class="ui negative message">Teilnehmeranzahl ist verpflichtend </div>
       </div>
-      <button type="submit" class="ui blue labeled icon button" [disabled]="editForm.invalid">
+      <button type="submit" class="ui blue labeled icon button" [disabled]="editForm.invalid" style="margin-bottom: 10px;">
           <i class="save icon"></i>Termindetails speichern
         </button>
-      <button type="submit" class="ui red labeled icon button" (click)="removeVaccination()">
-            <i class="remove icon"></i>Termin löschen
-        </button>
     </form>
+    <button type="submit" class="ui red labeled icon button" (click)="removeVaccination()" style="margin-bottom: 50px;">
+      <i class="remove icon"></i>Termin löschen
+    </button>
   </div>
 </div>

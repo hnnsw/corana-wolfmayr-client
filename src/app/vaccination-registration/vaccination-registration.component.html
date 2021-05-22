@@ -6,21 +6,21 @@
 <h1>Anmeldung</h1>
 <h3>{{vaccination?.location.name}}</h3>
 <p>Dieser Impftermin findet bei der Adresse <b>{{vaccination?.location.address}}, {{vaccination?.location.zipcode}}
-  {{vaccination?.location.city}}</b> am <b>{{vaccination?.dateOfVaccination | date:"dd.MM.yyyy"}}</b> zwischen <b>{{vaccination?.fromTime | date:"HH:mm"}} und
-  {{vaccination?.toTime | date:"HH:mm"}}</b> statt.</p>
+  {{vaccination?.location.city}}</b> am <b>{{vaccination?.dateOfVaccination | date:"dd.MM.yyyy"}}</b> zwischen <b>{{vaccination?.fromTime | date:"shortTime"}} und
+  {{vaccination?.toTime | date:"shortTime"}}</b> statt.</p>
 
 <form class="ui large form" [formGroup]="registrationForm" (ngSubmit)="addUserToVaccination()"
   style="margin-bottom: 50px;">
   <div class="field">
     <label>Vorname</label>
-    <input type="text" placeholder="Vorname" [(ngModel)]="activeUser.firstname" formControlName="firstname">
+    <input type="text" placeholder="Vorname" formControlName="firstname">
     <div
       *ngIf="registrationForm.get('firstname').invalid && (registrationForm.get('firstname').dirty || registrationForm.get('firstname').touched) && registrationForm.get('firstname').hasError('required')"
       class="ui negative message">Vorname ist verpflichtend </div>
   </div>
   <div class="field">
     <label>Nachname</label>
-    <input type="text" placeholder="Nachname" [(ngModel)]="activeUser.lastname" formControlName="lastname">
+    <input type="text" placeholder="Nachname" formControlName="lastname">
     <div
       *ngIf="registrationForm.get('lastname').invalid && (registrationForm.get('lastname').dirty || registrationForm.get('lastname').touched) && registrationForm.get('lastname').hasError('required')"
       class="ui negative message">Nachname ist verpflichtend </div>
@@ -36,28 +36,28 @@
   </div>
   <div class="field">
     <label>Geburtsdatum</label>
-    <input type="date" placeholder="Geburtsdatum" [(ngModel)]="activeUser.dateOfBirth" formControlName="dateOfBirth">
+    <input type="date" placeholder="Geburtsdatum" formControlName="dateOfBirth">
     <div
       *ngIf="registrationForm.get('dateOfBirth').invalid && (registrationForm.get('dateOfBirth').dirty || registrationForm.get('dateOfBirth').touched) && registrationForm.get('dateOfBirth').hasError('required')"
       class="ui negative message">Geburtsdatum ist verpflichtend </div>
   </div>
   <div class="field">
     <label>Sozialversicherungsnummer (SVNR)</label>
-    <input type="number" placeholder="SVNR" [(ngModel)]="activeUser.socialSecurityNumber" formControlName="socialSecurityNumber">
+    <input type="number" placeholder="SVNR" formControlName="socialSecurityNumber">
     <div
       *ngIf="registrationForm.get('socialSecurityNumber').invalid && (registrationForm.get('socialSecurityNumber').dirty || registrationForm.get('socialSecurityNumber').touched) && registrationForm.get('socialSecurityNumber').hasError('required')"
       class="ui negative message">SVNR ist verpflichtend </div>
   </div>
   <div class="field">
     <label>Telefonnummer</label>
-    <input type="tel" placeholder="Telefonnummer" [(ngModel)]="activeUser.phonenumber" formControlName="phonenumber">
+    <input type="tel" placeholder="Telefonnummer" formControlName="phonenumber">
     <div
       *ngIf="registrationForm.get('phonenumber').invalid && (registrationForm.get('phonenumber').dirty || registrationForm.get('phonenumber').touched) && registrationForm.get('phonenumber').hasError('required')"
       class="ui negative message">Telefonnummer ist verpflichtend </div>
   </div>
   <div class="field">
     <label>Email</label>
-    <input type="email" placeholder="Email" [(ngModel)]="activeUser.email" formControlName="email">
+    <input type="email" placeholder="Email" formControlName="email">
     <div
       *ngIf="registrationForm.get('email').invalid && (registrationForm.get('email').dirty || registrationForm.get('email').touched) && registrationForm.get('email').hasError('required')"
       class="ui negative message">Telefonnummer ist verpflichtend </div>

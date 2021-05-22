@@ -2,11 +2,12 @@
 <td data-label="Adresse">{{vaccination?.location.address}}, {{vaccination?.location.zipcode}}
   {{vaccination?.location.city}}</td>
 <td data-label="Datum">{{vaccination?.dateOfVaccination | date:"dd.MM.yyyy"}}</td>
-<td data-label="Zeitraum">{{vaccination?.fromTime | date:"HH:mm"}} - {{vaccination?.toTime | date:"HH:mm"}}</td>
+<td data-label="Zeitraum">{{vaccination?.fromTime | date:"shortTime"}} - {{vaccination?.toTime | date:"shortTime"}}</td>
 <td data-label="Teilnehmer">{{vaccination?.users.length}} / {{vaccination?.maxParticipants}}</td>
-<td *ngIf="authService.isLoggedIn() && activeUser.isAdmin" class="selectable warning">
+<td *ngIf="authService.isLoggedIn() && activeUser?.isAdmin" class="selectable warning">
   <a [routerLink]="['admin', vaccination.id]">Verwalten</a>
 </td>
-<td *ngIf="authService.isLoggedIn() && !activeUser.vaccinated && activeUser.vaccination_id == null" class="blue selectable">
+<td *ngIf="authService.isLoggedIn() && !activeUser?.vaccinated && activeUser?.vaccination_id == null"
+  class="blue selectable">
   <a [routerLink]="['user', vaccination.id]">Zur Impfung anmelden</a>
 </td>

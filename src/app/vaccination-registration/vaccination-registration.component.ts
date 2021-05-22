@@ -39,13 +39,18 @@ export class VaccinationRegistrationComponent implements OnInit {
       gender: ["", [Validators.required]],
       dateOfBirth: ["", [Validators.required]],
       socialSecurityNumber: ["", [Validators.required]],
-      phonenumber: ["", [Validators.required]],
+      phonenumber: [
+        "",
+        [Validators.required, Validators.minLength(6), Validators.maxLength(15)]
+      ],
       email: ["", [Validators.required]]
     });
 
     const params = this.route.snapshot.params;
     this.vs.getSingle(params["id"]).subscribe(res => {
       this.vaccination = res;
+      this.vaccination.fromTime = new Date(this.vaccination.fromTime);
+      this.vaccination.toTime = new Date(this.vaccination.toTime);
     });
 
     if (this.authService.isLoggedIn()) {
@@ -58,9 +63,17 @@ export class VaccinationRegistrationComponent implements OnInit {
   }
 
   addUserToVaccination() {
+    const val = this.registrationForm.value;
+
     if (confirm("Willst du dich wirklich zu diesen Impftermin anmelden?")) {
       this.activeUser.vaccination_id = this.vaccination.id;
       this.activeUser.gender = this.selectedGender;
+      this.activeUser.firstname = val.firstname;
+      this.activeUser.lastname = val.lastname;
+      this.activeUser.dateOfBirth = val.dateOfBirth;
+      this.activeUser.socialSecurityNumber = val.socialSecurityNumber;
+      this.activeUser.phonenumber = val.phonenumber;
+      this.activeUser.email = val.email;
 
       this.us.saveUser(this.activeUser).subscribe(res => {
         this.toastr.success(

@@ -8,6 +8,7 @@ import { AuthenticationService } from "../shared/authentication.service";
 import { UserFactory } from "../shared/user-factory";
 import { UserService } from "../shared/user.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { DatePipe } from "@angular/common";
 
 @Component({
   selector: "c-vaccination-list",
@@ -16,10 +17,8 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 export class VaccinationListComponent implements OnInit {
   vaccinations: Vaccination[];
   locations: Location[];
-  selectedLocationId: number;
   vaccination: Vaccination = VaccinationFactory.empty();
   activeUser: User = UserFactory.empty();
-  activeUserVaccinationDetails: Vaccination;
   createForm: FormGroup;
 
   @Output() showDetailsEvent = new EventEmitter<Vaccination>();
@@ -31,6 +30,7 @@ export class VaccinationListComponent implements OnInit {
     private toastr: ToastrService,
     public authService: AuthenticationService,
     private fb: FormBuilder,
+    private datePipe: DatePipe
   ) {}
 
   showDetails(vaccination: Vaccination) {
@@ -41,13 +41,15 @@ export class VaccinationListComponent implements OnInit {
     this.createForm = this.fb.group({
       location: ["", [Validators.required]],
       dateOfVaccination: ["", [Validators.required]],
-      fromTime: ["", [Validators.required]],
-      toTime: ["", [Validators.required]],
-      maxParticipants: ["", [Validators.required, Validators.min(1)]],
-    });
-
-    this.vs.getAll().subscribe(res => {
-      this.vaccinations = res;
+      fromTime: [
+        this.datePipe.transform(new Date(), "yyyy-MM-dd hh:mm:ss"),
+        [Validators.required]
+      ],
+      toTime: [
+        this.datePipe.transform(new Date(), "yyyy-MM-dd hh:mm:ss"),
+        [Validators.required]
+      ],
+      maxParticipants: ["", [Validators.required, Validators.min(1)]]
     });
 
     this.ls.getAllLocations().subscribe(res => {
@@ -59,26 +61,24 @@ export class VaccinationListComponent implements OnInit {
         .getSingleUserById(this.authService.getCurrentUserId())
         .subscribe(res => {
           this.activeUser = res;
-          if (this.activeUser.vaccination_id != null) {
-            this.activeUserVaccinationDetails = this.vaccinations[
-              this.activeUser.vaccination_id-1
-            ];
-          }
         });
     }
+
+    this.vs.getAll().subscribe(res => {
+      this.vaccinations = res;
+    });
   }
 
   addVaccination() {
+    const val = this.createForm.value;
+
     if (confirm("Wollen sie diesen Termin wirklich anlegen?")) {
       this.vaccination.id = this.vaccinations.length + 1;
-      this.vaccination.location_id = this.selectedLocationId;
-
-      /*convert dates to ISO8601 */
-      this.vaccination.dateOfVaccination = new Date(
-        this.vaccination.dateOfVaccination
-      );
-      this.vaccination.fromTime = new Date(this.vaccination.fromTime);
-      this.vaccination.toTime = new Date(this.vaccination.toTime);
+      this.vaccination.location_id = val.location;
+      this.vaccination.dateOfVaccination = new Date(val.dateOfVaccination);
+      this.vaccination.fromTime = val.fromTime;
+      this.vaccination.toTime = val.toTime;
+      this.vaccination.maxParticipants = val.maxParticipants;
 
       /*empty users from factory draft */
       this.vaccination.users = [];
@@ -88,6 +88,7 @@ export class VaccinationListComponent implements OnInit {
           "Neuer Impftermin wurde erstellt",
           "Impftermin erstellt!"
         );
+        this.ngOnInit();
       });
     }
   }

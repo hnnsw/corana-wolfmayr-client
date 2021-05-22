@@ -2,10 +2,8 @@
   <h2>Deine Impfdetails</h2>
   <div>
     <p>
-      <!--<b>Ort:</b> {{activeUserVaccinationDetails?.location.name}}, {{activeUserVaccinationDetails?.location.zipcode}} {{activeUserVaccinationDetails?.location.city}}<br>
-        <b>Datum (Zeitraum):</b> {{activeUserVaccinationDetails?.dateOfVaccination | date:"dd.MM.yyyy"}} ({{activeUserVaccinationDetails?.fromTime | date:"HH:mm"}} - {{activeUserVaccinationDetails.toTime | date:"HH:mm"}})<br>-->
-      <b>Impftermin:</b> {{activeUser.vaccination_id != null && 'Ja' || 'Nein'}}<br>
-      <b>Impfung erhalten:</b> {{activeUser.vaccinated && 'Ja' || 'Nein'}}
+      <b>Impftermin vorhanden:</b> {{activeUser?.vaccination_id != null && 'Ja' || 'Nein'}}<br>
+      <b>Impfung erhalten:</b> {{activeUser?.vaccinated && 'Ja' || 'Nein'}}
     </p>
   </div>
 </div>
@@ -19,8 +17,8 @@
       <th>Datum</th>
       <th>Zeitraum</th>
       <th>Teilnehmer</th>
-      <th *ngIf="authService.isLoggedIn() && !activeUser.vaccinated && activeUser.vaccination_id == null"></th>
-      <th *ngIf="activeUser.isAdmin && authService.isLoggedIn()"></th>
+      <th *ngIf="authService.isLoggedIn() && !activeUser?.vaccinated && activeUser?.vaccination_id == null"></th>
+      <th *ngIf="activeUser?.isAdmin && authService.isLoggedIn()"></th>
     </tr>
   </thead>
   <tbody>
@@ -33,12 +31,12 @@
 </div>
 <p *ngIf="vaccinations && !vaccinations.length">Es wurden noch keine Impfungen am Server eingetragen</p>
 
-<div *ngIf="authService.isLoggedIn() && activeUser.isAdmin" style="margin-top:30px;">
+<div *ngIf="authService.isLoggedIn() && activeUser?.isAdmin" style="margin-top:30px;">
   <h2>Termin erstellen</h2>
   <form class="ui large form" [formGroup]="createForm" (ngSubmit)="addVaccination()" style="margin-bottom: 50px;">
     <div class="field">
       <label>Ort</label>
-      <select class="ui dropdown" [(ngModel)]="selectedLocationId" style="border-radius: 4px;" formControlName="location">
+      <select class="ui dropdown" style="border-radius: 4px;" formControlName="location">
         <option *ngFor="let location of locations" [ngValue]="location.id">{{location.name}} ({{location.address}}, {{location.zipcode}} {{location.city}})</option>
       </select>
       <div
@@ -47,103 +45,35 @@
     </div>
     <div class="field">
       <label>Datum</label>
-      <input type="date" placeholder="Datum" [(ngModel)]="vaccination.dateOfVaccination" formControlName="dateOfVaccination">
+      <input type="date" placeholder="Datum" formControlName="dateOfVaccination">
       <div
         *ngIf="createForm.get('dateOfVaccination').invalid && (createForm.get('dateOfVaccination').dirty || createForm.get('dateOfVaccination').touched) && createForm.get('dateOfVaccination').hasError('required')"
         class="ui negative message">Datum ist verpflichtend </div>
     </div>
     <div class="field">
       <label>Von (Uhrzeit)</label>
-      <input type="datetime" placeholder="Von" [(ngModel)]="vaccination.fromTime" formControlName="fromTime">
+      <input type="datetime" placeholder="Von" formControlName="fromTime">
       <div
         *ngIf="createForm.get('fromTime').invalid && (createForm.get('fromTime').dirty || createForm.get('fromTime').touched) && createForm.get('fromTime').hasError('required')"
         class="ui negative message">Zeit (Von) ist verpflichtend </div>
     </div>
     <div class="field">
       <label>Bis (Uhrzeit)</label>
-      <input type="datetime" placeholder="Bis" [(ngModel)]="vaccination.toTime" formControlName="toTime">
+      <input type="datetime" placeholder="Bis" formControlName="toTime">
       <div
         *ngIf="createForm.get('toTime').invalid && (createForm.get('toTime').dirty || createForm.get('toTime').touched) && createForm.get('toTime').hasError('required')"
         class="ui negative message">Zeit (Bis) ist verpflichtend </div>
     </div>
     <div class="field">
       <label>Max. Teilnehmerzahl</label>
-      <input type="number" placeholder="Max. Teilnehmer" [(ngModel)]="vaccination.maxParticipants" formControlName="maxParticipants">
+      <input type="number" placeholder="Max. Teilnehmer" formControlName="maxParticipants">
       <div
         *ngIf="createForm.get('maxParticipants').invalid && (createForm.get('maxParticipants').dirty || createForm.get('maxParticipants').touched) && createForm.get('maxParticipants').hasError('required')"
-        class="ui negative message">Zeit (Bis) ist verpflichtend </div>
+        class="ui negative message">Max. Teilnehmer ist verpflichtend </div>
     </div>
-    <button type="submit" class="ui blue labeled icon button" [disabled]="createForm.invalid">
+    <button type="submit" class="ui blue labeled icon button" [disabled]="createForm.invalid" style="margin-bottom:50px;">
         <i class="save icon"></i>
         Termin erstellen
       </button>
   </form>
-
-
-
-
-
-
-
-  <!--<div class="ui four column grid" style="padding-bottom: 30px;">
-    <div class="row" style="padding-bottom:0;">
-      <div class="four wide column left aligned">
-        <h4>Ort:</h4>
-      </div>
-      <div class="column">
-        <select class="ui dropdown" [(ngModel)]="selectedLocationId" style="border-radius: 4px;">
-            <option *ngFor="let location of locations" [ngValue]="location.id">{{location.name}} ({{location.address}}, {{location.zipcode}} {{location.city}})</option>
-          </select>
-      </div>
-    </div>
-    <div class="row" style="padding-bottom:0;">
-      <div class="four wide column left aligned">
-        <h4>Datum:</h4>
-      </div>
-      <div class="column">
-        <div class="ui input">
-          <input type="date" placeholder="Datum" [(ngModel)]="vaccination.dateOfVaccination" formControlName="date">
-          <div *ngIf="loginForm.get('date').invalid && (loginForm.get('date').dirty || loginForm.get('date').touched)" class="ui negative message">Datum ist verpflichtend </div>
-        </div>
-      </div>
-    </div>
-    <div class="row" style="padding-bottom:0;">
-      <div class="four wide column left aligned">
-        <h4>Von (Uhrzeit):</h4>
-      </div>
-      <div class="column">
-        <div class="ui input">
-          <input type="datetime" placeholder="Von" [(ngModel)]="vaccination.fromTime">
-        </div>
-      </div>
-    </div>
-    <div class="row" style="padding-bottom:0;">
-      <div class="four wide column left aligned">
-        <h4>Bis (Uhrzeit):</h4>
-      </div>
-      <div class="column">
-        <div class="ui input">
-          <input type="datetime" placeholder="Bis" [(ngModel)]="vaccination.toTime">
-        </div>
-      </div>
-    </div>
-
-
-    <div class="row" style="padding-bottom:0;">
-      <div class="four wide column left aligned">
-        <h4>Max. Teilnehmerzahl:</h4>
-      </div>
-      <div class="column">
-        <div class="ui input">
-          <input type="number" placeholder="Max. Teilnehmer" [(ngModel)]="vaccination.maxParticipants">
-        </div>
-      </div>
-    </div>
-    <div class="row" style="padding-bottom:0;">
-      <button class="ui blue labeled icon button" (click)="addVaccination()">
-        <i class="save icon"></i>
-        Termin erstellen
-      </button>
-    </div>
-  </div>-->
 </div>
