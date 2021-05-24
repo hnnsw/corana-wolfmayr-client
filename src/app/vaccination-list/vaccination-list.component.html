@@ -17,7 +17,7 @@
       <th>Datum</th>
       <th>Zeitraum</th>
       <th>Teilnehmer</th>
-      <th *ngIf="authService.isLoggedIn() && !activeUser?.vaccinated && activeUser?.vaccination_id == null"></th>
+      <th></th>
       <th *ngIf="activeUser?.isAdmin && authService.isLoggedIn()"></th>
     </tr>
   </thead>

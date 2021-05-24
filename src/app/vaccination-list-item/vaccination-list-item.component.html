@@ -7,7 +7,7 @@
 <td *ngIf="authService.isLoggedIn() && activeUser?.isAdmin" class="selectable warning">
   <a [routerLink]="['admin', vaccination.id]">Verwalten</a>
 </td>
-<td *ngIf="authService.isLoggedIn() && !activeUser?.vaccinated && activeUser?.vaccination_id == null"
-  class="blue selectable">
+<td class="selectable"
+  [ngClass]="authService.isLoggedIn() && !activeUser?.vaccinated && activeUser?.vaccination_id == null && vaccination?.users.length < vaccination?.maxParticipants? 'blue' : 'grey disabled' ">
   <a [routerLink]="['user', vaccination.id]">Zur Impfung anmelden</a>
 </td>
